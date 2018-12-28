@@ -43,7 +43,7 @@ server {
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
-		root /home/naminoqiu/forFortune/bom/website/html;
+		root ../html;
 		try_files $uri $uri/ =404;
 	}
 
