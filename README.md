@@ -7,3 +7,10 @@ nginx configuration file default locations can be found by 'sudo nginx -h' in co
 put 'include /path/to/here' to one line of http {} of configure file, and comment out others if neccessary
 
 in command line, use 'sudo nginx -p /path/to/static' to specify prefix location for static files, note that this will change global setting for prefix of relative path specification
+
+2 github:
+
+example for push: 
+git push -u ori master
+
+if you don't know how to merge, just delete and pull again
