@@ -1,10 +1,104 @@
 <!DOCTYPE html>
 <html>
-<title>HTML Tutorial</title>
-<body>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<h1>This is a heading</h1>
-<p>This is a paragraph.</p>
+  <title> Fortune Table Maker </title>
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <style>
+  </style>
+</head>
 
-</body>
+<Body>
+
+  <!-- Title Bar -->
+	<div class="banner">
+		<ul class="navWrapper">
+			<li class="navBulletPoint">
+				<a href="/" id="tocheck">
+					Volcan | 华升
+				</a>
+			</li>
+
+      <li class="navBulletPoint">
+      	<a onclick="switchToTableMaker(event)">
+        	Table Maker | 制表
+        </a>
+      </li>
+
+			<li class="navBulletPoint">
+				<a onclick="switchToUploadBom(event)">
+					Upload BOM | 上传BOM
+				</a>
+			</li>
+
+      <li class="navBulletPoint">
+				<a onclick="switchToSignInOut(event)">
+					Sign in/out | 登陆／登出
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div style="margin-top: 20px" id="tableMaker">
+		<div style="text-align: center">
+			<textarea rows="4" cols="50" id="requestPartNumbers" placeholder="fill the part numbers line by line"></textarea>
+		</div>
+
+		<div style="max-width: 1200px; margin: auto">
+			<div style="margin-left:25px" id="selectorGroup">
+					<!-- the added column names go here-->
+			</div>
+
+			<div style="margin: 5px 5px 5px 5px; display: none;" id="rmButton">
+				<button onclick="removeLastSelector()">-</button>
+			</div>
+
+			<div style="margin: 5px 5px 5px 5px; display: inline-block">
+				<button onclick="createSelector()">+</button>
+			</div>
+
+		</div>
+
+		<div style="margin-top:20px; text-align: center">
+			<button onclick="onRequest(event)" id="makeTableButton">Make the Table</button>
+		</div>
+
+		<table style="widht: 100%; margin-left: 30px" id="tableWrapper">
+
+		</table>
+
+		<!--<input type="file" onchange="logFile(event)">-->
+	</div>
+
+
+
+
+	<div class="uploadBom" id="uploadBom" style="display:none; text-align: center">
+		<input type="file" onchange="onChoseFile(event)" id="chooseBomButton">
+		<div style="margin: auto; text-align: left; max-width: 300px; margin-top: 20px" id="uploadStatWrapper"></div>
+	</div>
+
+  <div class="signInOut" id="signInOut" style="display:none; text-align: center">
+    <div id="signInPanel" style="display:none">
+      <input placeholder="Username | 用户名">
+      <input placeholder="Password | 密码">
+      <button> Sign In | 登陆 </button>
+    </div>
+
+    <div id="signOutPanel" style="display:none">
+      <button> Sign Out | 登出 </button>
+    </div>
+
+  </div>
+
+
+	<script src="/js/helperTool.js"></script>
+	<script src="/js/main.js"></script>
+	<script src="/js/fileSaver.js"></script>
+	<script src="/js/xlsx.full.min.js"></script>
+	<script src="/js/xlsxTool.js"></script>
+
+</Body>
+
 </html>
