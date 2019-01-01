@@ -15,7 +15,7 @@
 	<div class="banner">
 		<ul class="navWrapper">
 			<li class="navBulletPoint">
-				<a href="/" id="tocheck">
+				<a id="tocheck">
 					Volcan | 华升
 				</a>
 			</li>
@@ -42,8 +42,14 @@
 
 	<div style="margin-top: 20px" id="tableMaker">
 		<div style="text-align: center">
-			<textarea rows="4" cols="50" id="requestPartNumbers" placeholder="fill the part numbers line by line"></textarea>
+			<textarea rows="4" cols="50" id="requestPartNumbers" placeholder="fill the part numbers/names line by line | 请逐行输入部件号码或名称"></textarea>
 		</div>
+
+    <div style="text-align: center">
+      <p>Select one query method: | 请选择一种检索方式: </p>
+      <input type="radio" name="queryBy" value="Part Number" checked> Part Number | 部件号码<br>
+      <input type="radio" name="queryBy" value="Part Name"> Part Name (not recommended) | 部件名称 (不推荐)<br>
+    </div>
 
 		<div style="max-width: 1200px; margin: auto">
 			<div style="margin-left:25px" id="selectorGroup">
@@ -61,41 +67,55 @@
 		</div>
 
 		<div style="margin-top:20px; text-align: center">
-			<button onclick="onRequest(event)" id="makeTableButton">Make the Table</button>
+			<button onclick="onRequest(event)" id="makeTableButton">Make the Table | 开始制表</button>
 		</div>
 
-		<table style="widht: 100%; margin-left: 30px" id="tableWrapper">
+    <div style="margin: auto; text-align: left; margin-top: 20px">
+      <table style="widht: 100%;" id="tableWrapper"></table>
+    </div>
 
-		</table>
 
-		<!--<input type="file" onchange="logFile(event)">-->
 	</div>
 
 
 
 
 	<div class="uploadBom" id="uploadBom" style="display:none; text-align: center">
-		<input type="file" onchange="onChoseFile(event)" id="chooseBomButton">
-		<div style="margin: auto; text-align: left; max-width: 300px; margin-top: 20px" id="uploadStatWrapper"></div>
+    <div>
+      <input type="file" onchange="onChoseFile(event)" id="chooseBomButton">
+    </div>
+
+		<div style="margin: auto; text-align: left; margin-top: 20px" id="uploadStatWrapper"></div>
+
+    <div id="uploadBtnWrapper" style="display:none; margin-top: 20px">
+      <button id="uploadBtn" onclick="confirmAndUploadBom(this)">
+        Confirmed and Upload | 确认无误且上传
+      </button>
+    </div>
+    <div style="height:60px"></div>
 	</div>
 
   <div class="signInOut" id="signInOut" style="display:none; text-align: center">
     <div id="signInPanel" style="display:none">
-      <input placeholder="Username | 用户名">
-      <input placeholder="Password | 密码">
-      <button> Sign In | 登陆 </button>
+      <input placeholder="Username | 用户名" id="usrNameField">
+      <input placeholder="Password | 密码" id="pswField">
+      <button onclick="signIn(event,this)"> Sign In | 登陆 </button>
     </div>
 
     <div id="signOutPanel" style="display:none">
-      <button> Sign Out | 登出 </button>
+      <button onclick="signOut(event,this)"> Sign Out | 登出 </button>
     </div>
 
   </div>
 
-
+  <script src="/js/account.js"></script>
+  <script src="/js/bomUpload.js"></script>
+  <script src="/js/createTable.js"></script>
+  <script src="/js/fileSaver.js"></script>
 	<script src="/js/helperTool.js"></script>
 	<script src="/js/main.js"></script>
-	<script src="/js/fileSaver.js"></script>
+  <script src="/js/md5.js"></script>
+  <script src="/js/tableMaker.js"></script>
 	<script src="/js/xlsx.full.min.js"></script>
 	<script src="/js/xlsxTool.js"></script>
 

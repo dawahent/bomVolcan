@@ -24,7 +24,7 @@ function renderJoinBorder(){
 function myAjax(toSend,cb){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = cb;
-    xhttp.open("POST", "/");
+    xhttp.open("POST", "/dynamic/");
     xhttp.send(JSON.stringify(toSend));
 }
 
@@ -59,32 +59,6 @@ function logFile(event) {
     reader.readAsDataURL(file)
 }
 
-function onChoseFile(event){
-    event.preventDefault();
-    let temp = document.getElementById("chooseBomButton");
-    temp.disabled = true;
-
-    while(document.getElementById("uploadStatWrapper").lastChild){
-        document.getElementById("uploadStatWrapper").removeChild(document.getElementById("uploadStatWrapper").lastChild)
-    }
-
-    let reader = new FileReader();
-    let file = event.target.files[0];
-
-    reader.onloadend = () => {
-        let wb;
-        try{
-            wb = XLSX.read(reader.result, { type: 'binary' })
-        }catch(err){
-            document.getElementById("uploadStatWrapper").appendChild(document.createTextNode("please only upload XLSX file"))
-            document.getElementById("chooseBomButton").disabled = false;
-        }
-        getItemInfo(wb)
-    }
-
-    reader.readAsBinaryString(file)
-}
-
 function switchToTableMaker(event){
     event.preventDefault();
     let tbmk = document.getElementById("tableMaker");
@@ -93,6 +67,7 @@ function switchToTableMaker(event){
     tbmk.style.display = "block";
     upBom.style.display = "none";
     sio.display = "none";
+    checkSignInOut();
 }
 
 function switchToUploadBom(event){
@@ -103,6 +78,7 @@ function switchToUploadBom(event){
     tbmk.style.display = "none";
     upBom.style.display = "block";
     sio.style.display = "none";
+    checkSignInOut();
 }
 
 function switchToSignInOut(event){
@@ -121,79 +97,7 @@ function onSelect(event) {
 
 }
 
-function makeTable(dt){
-    //clear the made table
-    let tableArea = document.getElementById("tableWrapper");
-    while(tableArea.hasChildNodes()){
-        tableArea.removeChild(tableArea.lastChild);
-    }
 
-    //make header
-    let headerRow = document.createElement("tr")
-    for(let i = 0; i < selectorValueSet.length; i++){
-        let temp = document.createElement("th");
-        temp.appendChild(document.createTextNode(selectorValueSet[i]))
-        headerRow.appendChild(temp);
-    }
-    tableArea.appendChild(headerRow)
-
-    //append data
-    // console.log(lastReqPartNumbers)
-    for(let i = 0; i < lastReqPartNumbers.length; i++){
-        let dataRow = document.createElement("tr");
-        for(let j = 0; j < selectorValueSet.length; j++){
-            let temp = document.createElement("td");
-            if(dt[lastReqPartNumbers[i]] && dt[lastReqPartNumbers[i]][selectorValueSet[j]]){
-                temp.appendChild(document.createTextNode(dt[lastReqPartNumbers[i]][selectorValueSet[j]]))
-            }else{
-                if(selectorValueSet[j] === "Part Number"){
-                    temp.appendChild(document.createTextNode(lastReqPartNumbers[i]))
-                }else{
-                    temp.appendChild(document.createTextNode(" "))
-                }
-
-            }
-            dataRow.appendChild(temp)
-        }
-        tableArea.appendChild(dataRow)
-    }
-
-    let wb = XLSX.utils.table_to_book(document.getElementById("tableWrapper"), {sheet:"Sheet JS"});
-    let wbout = XLSX.write(wb, {bookType:"xlsx", bookSST:true, type: 'binary'});
-    let fname = 'result.xlsx'
-    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), fname);
-}
-
-function onRequest(event){
-    event.preventDefault()
-
-    let toReq = document.getElementById("requestPartNumbers").value
-
-
-    if(toReq === "" || selectorValueSet.length == 0) return;
-
-    let temp = toReq.split(/(\r\n|\n|\r)/gm)
-
-    let partNumbers = []
-    for(let i = 0; i < temp.length; i++){
-        if(temp[i] === "" || temp[i] === temp[1]) continue
-        partNumbers.push(temp[i])
-    }
-
-    lastReqPartNumbers = partNumbers
-
-    let req = {}
-    req.action = "reqPartInfo";
-    req.actualData = partNumbers;
-
-    myAjax(req,function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var res = JSON.parse(this.responseText);
-            console.log(res.actualData)
-            makeTable(res.actualData);
-        }
-    })
-}
 
 function s2ab(s) {
 	if(typeof ArrayBuffer !== 'undefined') {
@@ -206,4 +110,14 @@ function s2ab(s) {
 		for (var i=0; i!=s.length; ++i) buf[i] = s.charCodeAt(i) & 0xFF;
 		return buf;
 	}
+}
+
+var CNdict = {
+  'Customer': '�˿�'
+};
+
+function CNTrans(word){
+  if(word in CNdict)
+    return CNdict[word];
+  return word;
 }

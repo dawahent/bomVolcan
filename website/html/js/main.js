@@ -2,6 +2,7 @@
 var selectorValueSet;
 var createdSelectorNum;
 var lastReqPartNumbers;
+var jsToPass = null;
 init()
 
 function init(){
@@ -62,6 +63,7 @@ function createSelector(){
     document.getElementById("rmButton").style.display="inline-block";
 }
 
+
 function appendOptionsToSelector(s){
     let op = document.createElement("OPTION")
     let opTxt = document.createTextNode("(empty)")
@@ -69,8 +71,8 @@ function appendOptionsToSelector(s){
     op.appendChild(opTxt)
     s.appendChild(op)
 
-    let setOfValue = ["Product Item Id", "Product Name", "Prepare by", "Date", "Rev", "Customer", "Verify by", "Page", "Part Number", "Item", "Level", "Usage",
-                    "Part Name", "Mtl Specification", "Unit", "Q\'ty\/Set", "Vendor", "Remark"];
+    // let setOfValue = ["Product Item Id", "Product Name", "Prepare by", "Date", "Rev", "Customer", "Verify by", "Page", "Part Number", "Item", "Level", "Usage",
+    //                 "Part Name", "Mtl Specification", "Unit", "Q\'ty\/Set", "Vendor", "Remark"];
     for (let i = 0; i < setOfValue.length; i++){
         let op = document.createElement("OPTION")
         let opTxt = document.createTextNode(setOfValue[i])
