@@ -17,6 +17,8 @@ function makeTable(dt){
     while(tableArea.hasChildNodes()){
         tableArea.removeChild(tableArea.lastChild);
     }
+    document.getElementById('makeTableButton').disabled = true;
+    document.getElementById('makeTableButton').textContent = "Waiting for response | 正在等待服务器响应";
 
     //make header
     let headerRow = document.createElement("tr")
@@ -143,7 +145,13 @@ function renderTableAndOutputCSV(queryResult){
   let crTable = createTable(colName, [], colVal, '');
   crTable.id = 'partInfoTable';
   document.getElementById('tableWrapper').appendChild(crTable);
+
+  //activate download
   document.getElementById('downloadTableButton').disabled = false;
+
+  //reacitivate request button
+  document.getElementById('makeTableButton').disabled = false;
+  document.getElementById('makeTableButton').textContent = "Make the Table | 开始制表";
   // outputCSV('partInfoTable');
 }
 
