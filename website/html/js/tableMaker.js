@@ -1,15 +1,16 @@
-var setOfValue = ["Product Item Id", "Product Name", "Prepare by", "Date", "Rev", "Customer", "Verify by", "Page", "Part Number", "Item", "Source",
+var setOfValue = ["Product Item Id", "Product Name", "Prepare by", "Date", "Rev", "Customer", "Verify by", "Part Number", "Item", "Source",
 "Part Name", "Mtl Specification", "Unit", "Q\'ty\/Set", "Vendor", "Remark"];
 
-var dirctFromPart = ["Part Number", "Item", "Source", "Part Name", "Mtl Specification", "Unit", "Q\'ty\/Set", "Vendor", "Remark"];
+var directFromPart = ["Part Number", "Item", "Source", "Part Name", "Mtl Specification", "Unit", "Vendor", "Remark"];
 
 var jsToFetch = {};
-//three types of col to retrieve:
+//four types of col to retrieve:
+//*) empty
 //a) directly from part json
 //b) check belong in part json to get, only belong to one product
 //c) check belong in part json to get, belong to multiple products
 
-//recently only consider a) and b)
+//recently only consider *), a) and b)
 function makeTable(dt){
     //clear the made table
     let tableArea = document.getElementById("tableWrapper");
@@ -56,6 +57,12 @@ function makeTable(dt){
 function onRequest(event){
     event.preventDefault()
 
+    //clear table wrapper first
+    while(document.getElementById('tableWrapper').lastChild){
+      document.getElementById('tableWrapper').removeChild(document.getElementById('tableWrapper').lastChild);
+    }
+
+    //fetch query values
     let toReq = document.getElementById("requestPartNumbers").value;
     console.log(toReq);
 
@@ -79,14 +86,15 @@ function onRequest(event){
     req.query = queryVals;
     req.queryBy = getQueryBy();
     req.sid = extFromCookie('sid');
-    
+
     console.log(req);
 
     myAjax(req,function() {
         if (this.readyState == 4 && this.status == 200) {
-            var res = JSON.parse(this.responseText);
-            console.log(res)
-            //
+
+            jsToFetch = JSON.parse(this.responseText);
+            console.log(jsToFetch)
+            renderTableAndOutputCSV(jsToFetch);
             // makeTable(res.actualData);
         }
     });
@@ -100,3 +108,50 @@ function getQueryBy(){
       return radioList[i].value;
   }
 }
+
+function renderTableAndOutputCSV(queryResult){
+  //right now assume each part only belong to one product
+  let tempDict = {};
+  queryResult['productSet'].forEach(function(p){
+    tempDict[p['_id']] = p;
+  });
+
+  let colName = selectorValueSet;
+  let colVal = [];
+  queryResult['partInfoSet'].forEach(function(js){
+    let toPush = [];
+    colName.forEach(function(col){
+      if(directFromPart.indexOf(col) != -1){
+        toPush.push(js[col]);
+      }else{
+        if(col === "(empty)"){
+          toPush.push('');
+        }else{
+          if(col === "Q\'ty\/Set"){
+            toPush.push(js['belong'][0][1]);
+          }else{
+            //lookup product
+            belongedProductId = js['belong'][0][0];
+            toPush.push(tempDict[belongedProductId][col]);
+          }
+        }
+      }
+    });
+    colVal.push(toPush);
+  });
+
+  let crTable = createTable(colName, [], colVal, '');
+  crTable.id = 'partInfoTable';
+  document.getElementById('tableWrapper').appendChild(crTable);
+  document.getElementById('downloadTableButton').disabled = false;
+  // outputCSV('partInfoTable');
+}
+
+function onDownloadCSV(event){
+  event.preventDefault();
+
+  outputCSV('partInfoTable');
+}
+
+
+//

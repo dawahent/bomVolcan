@@ -68,12 +68,16 @@
 
 		<div style="margin-top:20px; text-align: center">
 			<button onclick="onRequest(event)" id="makeTableButton">Make the Table | 开始制表</button>
+      <button onclick="onDownloadCSV(event)" id="downloadTableButton" disabled> Download as CSV | 下载CSV格式</button>
 		</div>
 
     <div style="margin: auto; text-align: left; margin-top: 20px">
-      <table style="widht: 100%;" id="tableWrapper"></table>
+      <p id="tableMakerErrorMsg"></p>
     </div>
 
+    <div style="margin: auto; text-align: left; margin-top: 20px" id="tableWrapper"></div>
+
+    <div style="height:60px"></div>
 
 	</div>
 

@@ -70,5 +70,5 @@ def reqPartInfoProcess(reqJson, usrInfo):
         js['parts_id'] = map(lambda x: str(x), js['parts_id'])
 
     #return the whole json
-    print respJson
+    # print respJson
     return respJson

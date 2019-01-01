@@ -97,7 +97,12 @@ function onSelect(event) {
 
 }
 
-
+function outputCSV(tableElementId){
+  let wb = XLSX.utils.table_to_book(document.getElementById(tableElementId), {sheet:"Sheet JS"});
+  let wbout = XLSX.write(wb, {bookType:"xlsx", bookSST:true, type: 'binary'});
+  let fname = 'result.xlsx'
+  saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), fname);
+}
 
 function s2ab(s) {
 	if(typeof ArrayBuffer !== 'undefined') {
