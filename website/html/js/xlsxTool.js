@@ -6,39 +6,63 @@ function getCellValue(wb,sheetIdx,cellAddr){
 
 function getItemInfo(wb){
 
-  let productNum = getCellValue(wb,0,'A7')
+  let productNum = getCellValue(wb,0,'A7');
 
-  let tempSplit = productNum[16];
+  if(productNum){
+    tempSplit = productNum[16];
 
-  productNum = productNum.split(tempSplit);
-  console.log(productNum);
-  productNum = productNum[1];
-  productNum = productNum.slice(1,productNum.length);
+    productNum = productNum.split(tempSplit);
+    // console.log(productNum);
+    productNum = productNum[1];
+    productNum = productNum.slice(1,productNum.length);
+  }else{
+    return;
+  }
+
+
 
   let preparer = getCellValue(wb,0,'E7');
-  preparer = preparer.split(":");
-  preparer = preparer[1];
+  if(preparer){
+    preparer = preparer.split(":");
+    preparer = preparer[1];
+  }else{
+    preparer = '';
+  }
+
 
 
   let dt = getCellValue(wb,0,'H7');
+  if(!dt) dt = '';
   // if(typeof dt !== "number") return;
 
   let productName = getCellValue(wb,0,'A8');
-  productName = productName.split(tempSplit);
-  productName = productName[1];
+  if(productName){
+    productName = productName.split(tempSplit);
+    productName = productName[1];
+  }else{
+    productName = '';
+  }
+
 
   let rev = getCellValue(wb,0,'H8');
+  if(!rev) rev = '';
 
   let customer = getCellValue(wb,0,'A9');
-  console.log(customer);
-  customer = customer.split(tempSplit);
-  customer = customer[1];
+  // console.log(customer);
+  if(customer){
+    customer = customer.split(tempSplit);
+    customer = customer[1];
+  }else{
+    customer = '';
+  }
 
   let verifier = getCellValue(wb,0,'E9');
-  verifier = verifier.split(tempSplit);
-  verifier = verifier[1];
-
-
+  if(verifier){
+    verifier = verifier.split(tempSplit);
+    verifier = verifier[1];
+  }else{
+    verifier = '';
+  }
 
   //part info saver
 
